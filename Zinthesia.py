@@ -93,7 +93,6 @@ class Midi_Video:
             #    elif msg["value"] <= 63:
             #        parsed.append({"pedal":"off","time":time})
                 
-        print("Midi parsed!")
         return parsed
 
     def DecodeSound(self):
