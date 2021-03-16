@@ -104,5 +104,16 @@ venv.bak/
 .mypy_cache/
 
 # Data and models
-*.h5
-/data/*
+# *.h5
+# /data/*
+
+# VsCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/

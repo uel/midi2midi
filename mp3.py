@@ -1,9 +1,7 @@
-#https://stackoverflow.com/questions/53633177/how-to-read-a-mp3-audio-file-into-a-numpy-array-save-a-numpy-array-to-mp3
 import numpy as np
 import pydub
 
 def read(f, normalized=False):
-    """MP3 to numpy array"""
     a = pydub.AudioSegment.from_mp3(f)
     y = np.array(a.get_array_of_samples())
     if a.channels == 2:
@@ -14,7 +12,6 @@ def read(f, normalized=False):
         return a.frame_rate, y
 
 def write(f, sr, x, normalized=False):
-    """numpy array to MP3"""
     channels = 2 if (x.ndim == 2 and x.shape[1] == 2) else 1
     if normalized:  # normalized array - each item should be a float in [-1, 1)
         y = np.int16(x * 2 ** 15)

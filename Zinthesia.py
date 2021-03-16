@@ -195,28 +195,6 @@ class Midi_Video:
         print("Render time: %ss" % (clock.time() - start_time))
         self.video.release()
 
-# video = Midi_Video(r"midi\song.mid", "piano.mp4", 30)
-# video.WriteFrames()
-# video.DecodeSound()
-# video.MergeVideo()  
-
-#midPath=r"C:\Users5\filip\Desktop\repos\Zinthesia\rach_muscaux_2.mid"
-#mp3Path=r"C:\Users\filip\Desktop\repos\Zinthesia\file.mp3"
-
-
-
-
-#Colors
-#Cleanup
-#Fugue time sync
-#Use same notes every where
-#More functions write frames
-#Limit never ending notes
-#Key light
-#Rounded Corners
-#Design
-#Barlines
-
 
 def CreateSong():
     from mido import Message, MidiFile, MidiTrack

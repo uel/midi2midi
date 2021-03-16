@@ -5,6 +5,8 @@ import math
 import os
 import cv2
 import pylab
+import librosa
+import librosa.display
 
 #sound accuracy data/s
 sAcc = 512
@@ -37,6 +39,27 @@ def FrequencyDistribution(signal, rate=44100):
 
     return np.array([notes])
 
+def cqt(data, rate, sacc):
+    length = len(data)/rate
+    result = np.empty((sacc, 0), "uint8")
+
+    for i in np.array_split(data, math.ceil(len(data)/(rate*65535/sacc))*10, axis=0):
+        hop_length = 256
+        C = librosa.cqt(i, sr=rate, fmin=26, n_bins=88, hop_length=hop_length)
+        #logC = librosa.amplitude_to_db(np.abs(C))
+        fig = pylab.figure(figsize=((i.shape[0]/rate)*sacc, sacc), frameon=False, dpi=1)
+        ax = fig.add_axes([0,0,1,1])
+        ax.axis("off")
+        librosa.display.specshow(C, sr=rate, x_axis='time', y_axis='cqt_note', fmin=26, cmap='gray', bins_per_octave=12)
+        pylab.axis('off')
+        
+        pylab.savefig('spectrogram.png', bbox_inches='tight')
+        pylab.close()
+        result = np.concatenate((result, cv2.imread("spectrogram.png", cv2.IMREAD_GRAYSCALE)), 1)
+
+    print("Spectogram created")
+    return result.swapaxes(0, 1)
+
 def GetSound(soundFile):
     rate, data = mp3.read(soundFile)
     data = data.sum(axis=1) / 2
@@ -54,7 +77,7 @@ def GetData(midiFile, soundFile):
     midiArray = midi.Midi2Array(midiFile, mAcc)
 
     m = midiArray*2
-    r = np.concatenate((freqDist*256, m[:freqDist.shape[0]]), axis=1)
+    r = np.concatenate((freqDist[:midiArray.shape[0]]*256, m[:freqDist.shape[0]]), axis=1)
     cv2.imwrite("current_data.bmp", r)
 
-    return freqDist, midiArray[:freqDist.shape[0]]/128
+    return freqDist[:midiArray.shape[0]], midiArray[:freqDist.shape[0]]/128
